@@ -8,22 +8,26 @@ notify() {
 
 case "$1" in
 	record|start)
-		mkdir -p /tmp/gifrecorder
-		touch /tmp/gifrecorder/.recording
+		if ! mkdir /tmp/gifrecorder; then
+			notify "Recording already in progress"
+			echo "Recording already in progress" >&2
+			exit 1
+		fi
 
-		while [ -f /tmp/gifrecorder/.recording ]; do
-			scrot --pointer "/tmp/gifrecorder/scrot_$(date +"%H_%M_%S_%N").png"
+		while [ -d /tmp/gifrecorder ]; do
+			scrot --pointer "/tmp/gifrecorder/scrot_$(date '+%s.N').png"
 			sleep 0.2
 		done
 		;;
 
 	stop)
-		rm /tmp/gifrecorder/.recording
+		mv -T /tmp/gifrecorder /tmp/gifrecorder.$$
+		date=$(date '+%F_%T.%N')
 		notify "Record Ended, encoding frames"
-		convert -delay 20 -loop 0 /tmp/gifrecorder/*.png /tmp/gifrecorder/animation.gif
-		rm /tmp/gifrecorder/*.png
-		mv /tmp/gifrecorder/animation.gif ~/animation.gif
-		notify "Frames encoded, gif saved on ~/animation.gif"
+		convert -delay 20 -loop 0 /tmp/gifrecorder.$$/*.png /tmp/gifrecorder.$$/animation.gif
+		mv /tmp/gifrecorder.$$/animation.gif ~/"gifrecord_$date.gif"
+		rm -rf /tmp/gifrecorder.$$
+		notify "Frames encoded, gif saved on ~/gifrecord_$date.gif"
 		;;
 
 	help|--help)

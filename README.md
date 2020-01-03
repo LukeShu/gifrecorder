@@ -17,7 +17,7 @@ Stops de recording
 gifrecorder stop
 ```
 
-Your animation will be saved on your HOME folder, under the name of animation.gif.
+Your animation will be saved in your `$HOME` folder, under the name of `gifrecord_${TIMESTAMP}.gif`.
 
 ## Dependencies
 
