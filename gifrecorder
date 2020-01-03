@@ -12,7 +12,7 @@ case "$1" in
 		touch /tmp/gifrecorder/.recording
 
 		while [ -f /tmp/gifrecorder/.recording ]; do
-			scrot -u "/tmp/gifrecorder/scrot_$(date +"%H_%M_%S_%N").png"
+			scrot "/tmp/gifrecorder/scrot_$(date +"%H_%M_%S_%N").png"
 			sleep 0.2
 		done
 		;;
