@@ -3,39 +3,39 @@
 help() { echo "gifrecorder [record|stop]"; }
 
 function notify {
-  echo $1
-  if [ -x `which notify-send` ]
-  then
-    notify-send -u critical "GifRecorder" "$1"
-  fi
+	echo $1
+	if [ -x `which notify-send` ]
+	then
+		notify-send -u critical "GifRecorder" "$1"
+	fi
 }
 
 case "$1" in
-  record)
-    mkdir -p /tmp/gifrecorder
-    touch /tmp/gifrecorder/.recording
+	record)
+		mkdir -p /tmp/gifrecorder
+		touch /tmp/gifrecorder/.recording
 
-    while [ -f /tmp/gifrecorder/.recording ]; do
-      scrot "scrot_$(date +"%H_%M_%S_%N").png" -u -e 'mv $f /tmp/gifrecorder/'
-      sleep 0.2
-    done
-    ;;
+		while [ -f /tmp/gifrecorder/.recording ]; do
+			scrot "scrot_$(date +"%H_%M_%S_%N").png" -u -e 'mv $f /tmp/gifrecorder/'
+			sleep 0.2
+		done
+		;;
 
-  stop)
-    rm /tmp/gifrecorder/.recording
-    notify "Record Ended, encoding frames"
-    convert -delay 20 -loop 0 /tmp/gifrecorder/*.png /tmp/gifrecorder/animation.gif
-    rm /tmp/gifrecorder/*.png
-    mv /tmp/gifrecorder/animation.gif ~/animation.gif
-    notify "Frames encoded, gif saved on ~/animation.gif"
-    ;;
+	stop)
+		rm /tmp/gifrecorder/.recording
+		notify "Record Ended, encoding frames"
+		convert -delay 20 -loop 0 /tmp/gifrecorder/*.png /tmp/gifrecorder/animation.gif
+		rm /tmp/gifrecorder/*.png
+		mv /tmp/gifrecorder/animation.gif ~/animation.gif
+		notify "Frames encoded, gif saved on ~/animation.gif"
+		;;
 
-  help|--help)
-    help
-    ;;
+	help|--help)
+		help
+		;;
 
-  *)
-    echo "Invalid argument"
-    help
-    ;;
+	*)
+		echo "Invalid argument"
+		help
+		;;
 esac
