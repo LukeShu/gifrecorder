@@ -2,21 +2,17 @@
 
 help() { echo "gifrecorder [record|stop]"; }
 
-function notify {
-	echo $1
-	if [ -x `which notify-send` ]
-	then
-		notify-send -u critical "GifRecorder" "$1"
-	fi
+notify() {
+	notify-send --app-name="GifRecorder" "$1"
 }
 
 case "$1" in
-	record)
+	record|start)
 		mkdir -p /tmp/gifrecorder
 		touch /tmp/gifrecorder/.recording
 
 		while [ -f /tmp/gifrecorder/.recording ]; do
-			scrot "scrot_$(date +"%H_%M_%S_%N").png" -u -e 'mv $f /tmp/gifrecorder/'
+			scrot -u "/tmp/gifrecorder/scrot_$(date +"%H_%M_%S_%N").png"
 			sleep 0.2
 		done
 		;;
