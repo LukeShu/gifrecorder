@@ -7,13 +7,13 @@ Bash script to record your screen in a gif on Ubuntu
 
 Starts the recording
 
-```
+```shell
 gifrecorder record
 ```
 
 Stops de recording
 
-```
+```shell
 gifrecorder stop
 ```
 
